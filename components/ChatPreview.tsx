@@ -10,9 +10,8 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
   time:string; carrier:string; connection:string; battery:number; charging:boolean;
 }) {
   return (
-    <div className="h-7 px-2 flex items-center justify-between text-[12px] text-black/80 bg-[#F2F3F5]">
-      <span className="tracking-tight leading-none">{time}</span>
-      <div className="flex items-center gap-2 leading-none">
+    <div className="relative h-7 bg-[#F2F3F5] text-[12px] text-black/80">
+      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2 leading-none">
         <span className="uppercase leading-none">{carrier}</span>
         <span className="leading-none">{connection}</span>
         <div className="flex items-center gap-1 leading-none">
@@ -22,6 +21,9 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
           </div>
           {charging && <span title="charging">⚡</span>}
         </div>
+      </div>
+      <div className="flex h-full items-center justify-center tracking-tight leading-none">
+        {time}
       </div>
     </div>
   );
@@ -144,7 +146,10 @@ export default function ChatPreview({
         <NavBarIOS name={contactName} subtitle={subtitle} avatar={avatarDataUrl} />
       </div>
       {/* messages */}
-      <div className="relative z-[1] flex-1 overflow-hidden px-3 pt-3 pb-16">
+      <div
+        className="relative z-[1] flex-1 overflow-y-auto px-3 pt-3 pb-16"
+        data-scrollable
+      >
         <div className="flex flex-col gap-[6px]">
           {messages.map((m) => <Bubble key={m.id} m={m} />)}
         </div>
