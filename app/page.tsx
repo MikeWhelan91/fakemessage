@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import ChatForm from "@/components/ChatForm";
 import ChatPreview from "@/components/ChatPreview";
 import { ChatState } from "@/src/lib/types";
-import html2canvas from "html2canvas";
+import { exportNodeToPNG } from "@/src/lib/exportToPng";
 
 const defaultState: ChatState = {
   header: {
@@ -35,26 +35,21 @@ export default function Page() {
     const node = exportRef.current;
     if (!node) return;
 
-    // Temporarily show the export preview
     node.style.display = "block";
+    await new Promise((r) => setTimeout(r, 50));
 
-    await new Promise((r) => setTimeout(r, 50)); // give layout a tick
-
-    const canvas = await html2canvas(node, {
-      backgroundColor: "#ffffff",
-      scale: 2,
-      useCORS: true,
-      logging: false,
-      windowWidth: node.clientWidth,
-      windowHeight: node.clientHeight,
-    });
-
-    const a = document.createElement("a");
-    a.download = "fake-whatsapp-chat.png";
-    a.href = canvas.toDataURL("image/png");
-    a.click();
+    const blob = await exportNodeToPNG(node, 2);
 
     node.style.display = "none";
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "fake-whatsapp-chat.png";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -63,7 +58,7 @@ export default function Page() {
 
       <div>
         {/* Smaller on-screen preview */}
-        <ChatPreview state={state} previewRef={liveRef} frame="glass" exportSize={{ w: 320, h: 640 }} />
+        <ChatPreview state={state} previewRef={liveRef} frame="glass" exportSize={{ w: 320, h: 693 }} />
         <button className="btn mt-4" onClick={handleDownload}>
           Download Image
         </button>

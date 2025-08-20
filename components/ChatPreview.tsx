@@ -42,7 +42,7 @@ function NavBarIOS({ name, subtitle, avatar }:{
       </div>
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded-full bg-neutral-300 overflow-hidden">
-          {avatar && <img src={avatar} alt="avatar" className="w-full h-full object-cover" />}
+          {avatar && <img src={avatar} alt="contact avatar" className="w-full h-full object-cover" />}
         </div>
         <svg viewBox="0 0 24 24" className="w-5 h-5 text-neutral-600">
           <path fill="currentColor" d="M12 8a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z"/>
@@ -73,7 +73,7 @@ function Bubble({ m }: { m: ChatMessage }) {
         <div className={cls} style={{ background: bg, color: '#111B21' }}>
           <Tail me={isMe} color={bg} />
           {m.kind === 'text' && <span>{m.text}</span>}
-          {m.kind === 'image' && m.imageDataUrl && <img src={m.imageDataUrl} className="rounded-xl max-w-full h-auto" alt="message" />}
+          {m.kind === 'image' && m.imageDataUrl && <img src={m.imageDataUrl} className="rounded-xl max-w-full h-auto" alt="chat message image" />}
           <div className="mt-1 flex items-center gap-1 justify-end text-[12px] text-[#667781] select-none">
             <span>{m.timestamp}</span>
             {isMe && (<>{m.status === 'sent' && <SingleTick className="w-3.5 h-3.5 text-[#8899a6]" />}{m.status === 'delivered' && <DoubleTick className="w-4 h-4" />}{m.status === 'read' && <DoubleTick className="w-4 h-4" blue />}</>)}
@@ -100,7 +100,7 @@ export default function ChatPreview({
   const {
     header: {
       contactName, onlineMode, lastSeenText, phoneTime, carrier,
-      connection, batteryPercent, charging, avatarDataUrl
+      connection, batteryPercent, charging, avatarDataUrl, wallpaper
     },
     messages, showWatermark
   } = state;
@@ -115,7 +115,12 @@ export default function ChatPreview({
     <div className="relative w-full h-full flex flex-col">
       {/* wallpaper */}
       <div
-        className='absolute inset-0 bg-[#ECE5DD] bg-[url("/wallpapers/whatsapp-light.jpg")] bg-repeat bg-[length:480px_480px] opacity-25'
+        className={cn(
+          'absolute inset-0 bg-[#ECE5DD]',
+          wallpaper === 'paper'
+            ? 'bg-[url("/wallpapers/whatsapp-light.jpg")] bg-repeat bg-[length:480px_480px]'
+            : ''
+        )}
         aria-hidden
       />
       {/* bars */}
@@ -152,10 +157,16 @@ export default function ChatPreview({
 
   if (frame === 'glass') {
     // On-screen preview (smaller, framed)
+    const width = exportSize.w;
+    const height = Math.round((width * 926) / 428);
     return (
       <div
         ref={previewRef as React.RefObject<HTMLDivElement>}
-        style={{ width: '320px', height: '640px' }}
+        style={{
+          width: `${width}px`,
+          height: `${height}px`,
+          ['--phone-w' as any]: `${width}px`,
+        }}
         className="relative"
       >
         <DeviceFrame>{Inner}</DeviceFrame>
