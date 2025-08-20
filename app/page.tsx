@@ -23,13 +23,14 @@ const defaultState: ChatState = {
 
 export default function Page() {
   const [state, setState] = useState<ChatState>(defaultState);
-  const liveRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const exportRef = useRef<HTMLDivElement>(null);
 
   const formSetState = (updater: (s: ChatState) => ChatState) =>
     setState((s) => updater(s));
 
   async function handleDownload() {
-    const node = liveRef.current;
+    const node = exportRef.current;
     if (!node) return;
 
     await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
@@ -56,9 +57,18 @@ export default function Page() {
           {/* Smaller on-screen preview */}
           <ChatPreview
             state={state}
-            previewRef={liveRef}
+            previewRef={previewRef}
             exportSize={{ w: 320, h: 693 }}
           />
+          {/* Off-screen export surface without frame */}
+          <div className="fixed -top-[10000px]" aria-hidden>
+            <ChatPreview
+              state={state}
+              previewRef={exportRef}
+              frame="none"
+              exportSize={{ w: 320, h: 693 }}
+            />
+          </div>
           <button
             className="mt-4 rounded-md bg-[#00A884] px-4 py-2 text-sm font-medium text-white hover:bg-[#029e70]"
             onClick={handleDownload}
