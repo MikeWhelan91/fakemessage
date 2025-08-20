@@ -26,25 +26,15 @@ export default function Page() {
   const [state, setState] = useState<ChatState>(defaultState);
 
   const liveRef = useRef<HTMLDivElement>(null);
-  const exportRef = useRef<HTMLDivElement>(null);
 
   const formSetState = (updater: (s: ChatState) => ChatState) =>
     setState((s) => updater(s));
 
   async function handleDownload() {
-    const node = exportRef.current;
+    const node = liveRef.current;
     if (!node) return;
 
-    const prevDisplay = node.style.display;
-    const prevOpacity = node.style.opacity;
-    node.style.display = "block";
-    node.style.opacity = "1";
-    await new Promise((r) => setTimeout(r, 50));
-
     const blob = await exportNodeToPNG(node, 2);
-
-    node.style.display = prevDisplay;
-    node.style.opacity = prevOpacity;
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -68,22 +58,6 @@ export default function Page() {
         </button>
       </div>
 
-      {/* Hidden export surface (full size, no glass) */}
-      <div
-        ref={exportRef}
-        style={{
-          width: 390,
-          height: 760,
-          position: "fixed",
-          left: "-10000px",
-          top: "0",
-          opacity: 0,
-          pointerEvents: "none",
-          display: "none",
-        }}
-      >
-        <ChatPreview state={state} previewRef={{ current: null }} frame="none" exportSize={{ w: 390, h: 760 }} />
-      </div>
     </div>
   );
 }
