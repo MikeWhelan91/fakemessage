@@ -1,8 +1,24 @@
 import './globals.css';
 
 export const metadata = {
-  title: "Fake WhatsApp Chat Generator",
-  description: "Create realistic fake WhatsApp chats and download PNGs that match the preview exactly. Free, no signup."
+  title: 'PretendChat | WhatsApp Chat Generator',
+  description:
+    'Design realistic WhatsApp conversations with PretendChat and download pixel-perfect images. Free tool, no signup.',
+  keywords: [
+    'PretendChat',
+    'WhatsApp chat generator',
+    'fake WhatsApp messages',
+    'WhatsApp fake chat creator',
+  ],
+  metadataBase: new URL('https://pretendchat.com'),
+  openGraph: {
+    title: 'PretendChat | WhatsApp Chat Generator',
+    description:
+      'Create and export realistic WhatsApp chats instantly with PretendChat.',
+    url: 'https://pretendchat.com',
+    siteName: 'PretendChat',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -14,3 +30,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
