@@ -26,7 +26,6 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
     </div>
   );
 }
-
 function NavBarIOS({ name, subtitle, avatar }:{
   name:string; subtitle:string; avatar:string|null;
 }) {
