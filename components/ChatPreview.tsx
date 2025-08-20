@@ -182,7 +182,7 @@ export default function ChatPreview({
       </div>
       {showWatermark && (
         <div className="absolute bottom-14 right-3 z-[1] text-[11px] text-neutral-500 select-none">
-          made with FakeChat
+          made with PretendChat.com
         </div>
       )}
     </div>

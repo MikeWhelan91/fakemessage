@@ -1,9 +1,9 @@
 "use client";
-import { useRef, useState } from "react";
-import ChatForm from "@/components/ChatForm";
-import ChatPreview from "@/components/ChatPreview";
-import { ChatState } from "@/src/lib/types";
-import { exportNodeToPNG } from "@/src/lib/exportToPng";
+import { useRef, useState } from 'react';
+import ChatForm from '@/components/ChatForm';
+import ChatPreview from '@/components/ChatPreview';
+import { ChatState } from '@/src/lib/types';
+import { exportNodeToPNG } from '@/src/lib/exportToPng';
 
 const defaultState: ChatState = {
   header: {
@@ -39,7 +39,7 @@ export default function Page() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "fake-whatsapp-chat.png";
+    a.download = 'pretendchat-whatsapp-chat.png';
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -47,17 +47,28 @@ export default function Page() {
   }
 
   return (
-    <div className="grid md:grid-cols-[1fr_auto] gap-6">
-      <ChatForm state={state} setState={formSetState} />
-
-      <div>
-        {/* Smaller on-screen preview */}
-        <ChatPreview state={state} previewRef={liveRef} frame="glass" exportSize={{ w: 320, h: 693 }} />
-        <button className="btn mt-4" onClick={handleDownload}>
-          Download Image
-        </button>
+    <main className="max-w-5xl mx-auto p-4">
+      <h1 className="mb-6 text-3xl font-bold text-center text-[#00A884]">
+        PretendChat
+      </h1>
+      <div className="grid md:grid-cols-[1fr_auto] gap-6">
+        <ChatForm state={state} setState={formSetState} />
+        <div className="flex flex-col items-center">
+          {/* Smaller on-screen preview */}
+          <ChatPreview
+            state={state}
+            previewRef={liveRef}
+            frame="glass"
+            exportSize={{ w: 320, h: 693 }}
+          />
+          <button
+            className="mt-4 rounded-md bg-[#00A884] px-4 py-2 text-sm font-medium text-white hover:bg-[#029e70]"
+            onClick={handleDownload}
+          >
+            Download Image
+          </button>
+        </div>
       </div>
-
-    </div>
+    </main>
   );
 }
