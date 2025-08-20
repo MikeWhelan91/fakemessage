@@ -10,7 +10,7 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
   time:string; carrier:string; connection:string; battery:number; charging:boolean;
 }) {
   return (
-    <div className="h-7 px-3 pt-[2px] flex items-center justify-between text-[12px] text-black/80">
+    <div className="h-7 px-3 pt-[2px] flex items-center justify-between text-[12px] text-black/80 bg-[#F2F3F5]">
       <span className="tracking-tight">{time}</span>
       <div className="flex items-center gap-2">
         <span className="uppercase">{carrier}</span>
