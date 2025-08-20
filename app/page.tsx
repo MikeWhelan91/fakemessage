@@ -35,12 +35,16 @@ export default function Page() {
     const node = exportRef.current;
     if (!node) return;
 
+    const prevDisplay = node.style.display;
+    const prevOpacity = node.style.opacity;
     node.style.display = "block";
+    node.style.opacity = "1";
     await new Promise((r) => setTimeout(r, 50));
 
     const blob = await exportNodeToPNG(node, 2);
 
-    node.style.display = "none";
+    node.style.display = prevDisplay;
+    node.style.opacity = prevOpacity;
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
