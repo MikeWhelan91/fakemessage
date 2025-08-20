@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="428" height="926" viewBox="0 0 428 926" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer body -->
+  <rect x="2" y="2" width="424" height="922" rx="60" fill="#0E1012" stroke="#1F2937" stroke-width="4"/>
+  <!-- Speaker / Dynamic Island (fixed in the frame so HTML doesn't have to render it) -->
+  <g transform="translate(0,0)">
+    <!-- centered pill -->
+    <rect x="139" y="60" width="150" height="24" rx="12" fill="#0E1012"/>
+  </g>
+  <!-- Cosmetic side buttons -->
+  <rect x="2" y="190" width="6" height="70" rx="3" fill="#3A3F44"/>
+  <rect x="2" y="280" width="6" height="50" rx="3" fill="#3A3F44"/>
+  <rect x="420" y="220" width="6" height="100" rx="3" fill="#3A3F44"/>
+</svg>

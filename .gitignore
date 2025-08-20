@@ -1,0 +1,23 @@
+@"
+# Node / Next.js
+node_modules/
+.next/
+dist/
+build/
+out/
+.turbo/
+.cache/
+.vercel/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.log
+
+# Env & local config
+.env*
+.vscode/
+.DS_Store
+Thumbs.db
+"@ | Set-Content -NoNewline .gitignore

@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #__next { height: 100%; }
+:root {
+  --phone-w: 392px;
+  --phone-h: 800px;
+}
+/* Bubble tails (small rounded wedge) */
+.bubble { position: relative; }
+.bubble--me::after,
+.bubble--them::after {
+  content: "";
+  position: absolute;
+  bottom: 0.35rem;
+  width: 10px; height: 10px;
+  background: inherit;            /* match bubble color */
+  border-bottom-right-radius: 8px;
+  transform: rotate(45deg);
+}
+/* Tail positions */
+.bubble--them::after { left: -4px; }
+.bubble--me::after   { right: -4px; }
+
+/* Light doodle wallpaper (CSS-only dots by default) */
+.wp-wallpaper {
+  background-color: var(--wp-wallpaper-bg, #ECE5DD);
+  background-image: radial-gradient(#000 0.6px, transparent 0.6px);
+  background-size: 12px 12px;
+  opacity: .10;                    /* subtle like WhatsApp */
+}
+.wp-wallpaper {
+  background: #ECE5DD url("/wallpapers/whatsapp-light.png") repeat;
+  background-size: 512px 512px;
+  opacity: .22;
+}
+/* LIVE TUNING (optional): adjust until edges align perfectly with your frame */
+:root {
+ --screen-top: 6.8%;
+  --screen-left: 4.8%;
+  --screen-width: 90.4%;
+  --screen-height: 86.8%;
+  --screen-radius: 44px;
+  --island-width: 36%;
+  --island-height: 16px; 
+}
