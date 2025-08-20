@@ -10,13 +10,13 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
   time:string; carrier:string; connection:string; battery:number; charging:boolean;
 }) {
   return (
-    <div className="h-7 px-3 pt-[2px] flex items-center justify-between text-[12px] text-black/80 bg-[#F2F3F5]">
-      <span className="tracking-tight">{time}</span>
-      <div className="flex items-center gap-2">
-        <span className="uppercase">{carrier}</span>
-        <span>{connection}</span>
-        <div className="flex items-center gap-1">
-          <div className="w-5 h-2.5 border border-black/70 rounded-[3px] relative">
+    <div className="h-7 px-2 flex items-center justify-between text-[12px] text-black/80 bg-[#F2F3F5]">
+      <span className="tracking-tight leading-none">{time}</span>
+      <div className="flex items-center gap-2 leading-none">
+        <span className="uppercase leading-none">{carrier}</span>
+        <span className="leading-none">{connection}</span>
+        <div className="flex items-center gap-1 leading-none">
+          <div className="w-5 h-2.5 border border-black/70 rounded-[3px] relative flex items-center">
             <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
             <div className="h-full bg-black/80" style={{width:`${Math.max(0,Math.min(100,battery))}%`}} />
           </div>
