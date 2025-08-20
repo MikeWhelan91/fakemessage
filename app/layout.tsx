@@ -3,7 +3,7 @@ import './globals.css';
 export const metadata = {
   title: 'PretendChat | WhatsApp Chat Generator',
   description:
-    'Design realistic WhatsApp conversations with PretendChat and download pixel-perfect images. Free tool, no signup.',
+    'Design realistic WhatsApp conversations with PretendChat and download pixel-perfect images without watermark. Free tool, no signup.',
   keywords: [
     'PretendChat',
     'WhatsApp chat generator',
@@ -14,7 +14,7 @@ export const metadata = {
   openGraph: {
     title: 'PretendChat | WhatsApp Chat Generator',
     description:
-      'Create and export realistic WhatsApp chats instantly with PretendChat.',
+      'Create and export realistic WhatsApp chats instantly with PretendChat without watermark.',
     url: 'https://pretendchat.com',
     siteName: 'PretendChat',
     type: 'website',

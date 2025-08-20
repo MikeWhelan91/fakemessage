@@ -19,12 +19,11 @@ const defaultState: ChatState = {
     avatarDataUrl: null,
   },
   messages: [],
-  showWatermark: true,
 };
 
 export default function Page() {
   const [state, setState] = useState<ChatState>(defaultState);
-
+  const [exporting, setExporting] = useState(false);
   const liveRef = useRef<HTMLDivElement>(null);
 
   const formSetState = (updater: (s: ChatState) => ChatState) =>
@@ -34,7 +33,10 @@ export default function Page() {
     const node = liveRef.current;
     if (!node) return;
 
+    setExporting(true);
+    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     const blob = await exportNodeToPNG(node, 2);
+    setExporting(false);
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -58,7 +60,7 @@ export default function Page() {
           <ChatPreview
             state={state}
             previewRef={liveRef}
-            frame="glass"
+            frame={exporting ? 'none' : 'glass'}
             exportSize={{ w: 320, h: 693 }}
           />
           <button
