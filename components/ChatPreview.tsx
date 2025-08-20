@@ -142,7 +142,7 @@ export default function ChatPreview({
       {/* input */}
       <div className="absolute left-0 right-0 bottom-0 z-[1] flex items-center gap-2 px-3 pb-3">
         <div
-          className="w-10 h-10 rounded-full border border-wpTickBlue flex items-center justify-center text-wpTickBlue"
+          className="w-10 h-10 rounded-full border border-wpTickBlue bg-white flex items-center justify-center text-wpTickBlue"
           aria-label="add attachment"
         >
           <svg
@@ -162,7 +162,7 @@ export default function ChatPreview({
           Message
         </div>
         <div
-          className="w-10 h-10 rounded-full border border-wpTickBlue flex items-center justify-center text-wpTickBlue"
+          className="w-10 h-10 rounded-full border border-wpTickBlue bg-white flex items-center justify-center text-wpTickBlue"
           aria-label="record voice message"
         >
           <svg
