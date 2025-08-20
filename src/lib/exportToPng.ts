@@ -6,6 +6,9 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
     scale,
     useCORS: true,
     allowTaint: true,
+    // Ensure the captured output isn't offset when the page is scrolled
+    scrollX: 0,
+    scrollY: -window.scrollY,
   });
 
   const blob = await new Promise<Blob | null>((resolve) =>
