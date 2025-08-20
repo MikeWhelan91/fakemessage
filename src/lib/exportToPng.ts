@@ -5,7 +5,16 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
     backgroundColor: null,
     scale,
     useCORS: true,
-    allowTaint: true
+    allowTaint: true,
   });
-  return new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b as Blob), "image/png"));
+
+  const blob = await new Promise<Blob | null>((resolve) =>
+    canvas.toBlob((b) => resolve(b), "image/png")
+  );
+
+  if (blob) return blob;
+
+  const dataUrl = canvas.toDataURL("image/png");
+  const res = await fetch(dataUrl);
+  return res.blob();
 }
