@@ -67,7 +67,7 @@ function Bubble({ m }: { m: ChatMessage }) {
     'shadow-[0_1px_0_rgba(0,0,0,.10)]'
   );
   return (
-    <div className={cn('w-full flex', isMe ? 'justify-end pr-1' : 'justify-start pl-1')}>
+    <div className={cn('w-full flex', isMe ? 'justify-end pr-1' : 'justify-start pl-2')}>
       <div className="max-w-[78%]">
         <div className={cls} style={{ background: bg, color: '#111B21' }}>
           <Tail me={isMe} color={bg} />
