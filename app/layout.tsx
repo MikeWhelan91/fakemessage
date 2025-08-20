@@ -2,7 +2,7 @@ import './globals.css';
 
 export const metadata = {
   title: "Fake WhatsApp Chat Generator",
-  description: "Create realistic fake WhatsApp chats. Free, no signup."
+  description: "Create realistic fake WhatsApp chats and download PNGs that match the preview exactly. Free, no signup."
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
