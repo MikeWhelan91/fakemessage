@@ -154,24 +154,16 @@ export default function ChatForm({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <L>Wallpaper</L>
-            <select
-              className={inputCls}
-              value={state.header.wallpaper}
-              onChange={e => setHeader('wallpaper', e.target.value as any)}
-            >
-              <option value="solid">Solid</option>
-              <option value="paper">Paper pattern</option>
-            </select>
-          </div>
-          <div className="flex items-end gap-2">
-            <input id={`${id}-wm`} type="checkbox"
-                   checked={state.showWatermark}
-                   onChange={e => setState(s => ({ ...s, showWatermark: e.target.checked }))} />
-            <label htmlFor={`${id}-wm`} className="text-[13px]">Show watermark</label>
-          </div>
+        <div>
+          <L>Wallpaper</L>
+          <select
+            className={inputCls}
+            value={state.header.wallpaper}
+            onChange={e => setHeader('wallpaper', e.target.value as any)}
+          >
+            <option value="solid">Solid</option>
+            <option value="paper">Paper pattern</option>
+          </select>
         </div>
       </section>
 

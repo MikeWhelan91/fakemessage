@@ -30,5 +30,4 @@ export interface ChatMessage {
 export interface ChatState {
   header: HeaderState;
   messages: ChatMessage[];
-  showWatermark: boolean;
 }

@@ -17,7 +17,7 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
         <span>{connection}</span>
         <div className="flex items-center gap-1">
           <div className="w-5 h-2.5 border border-black/70 rounded-[3px] relative">
-            <div className="absolute right-[-4px] top-0.5 w-1 h-1.5 bg-black/70 rounded-sm" />
+            <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
             <div className="h-full bg-black/80" style={{width:`${Math.max(0,Math.min(100,battery))}%`}} />
           </div>
           {charging && <span title="charging">⚡</span>}
@@ -32,7 +32,17 @@ function NavBarIOS({ name, subtitle, avatar }:{
   return (
     <div className="h-12 px-2 flex items-center justify-between bg-[#F2F3F5] border-b border-black/10">
       <div className="flex items-center gap-1 text-[16px] text-[#007AFF] font-medium">
-        <svg viewBox="0 0 24 24" className="w-5 h-5"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        <svg
+          viewBox="0 0 24 24"
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
         <span>Chats</span>
       </div>
       <div className="absolute left-1/2 -translate-x-1/2 text-center leading-tight">
@@ -101,7 +111,7 @@ export default function ChatPreview({
       contactName, onlineMode, lastSeenText, phoneTime, carrier,
       connection, batteryPercent, charging, avatarDataUrl, wallpaper
     },
-    messages, showWatermark
+    messages
   } = state;
 
   const subtitle =
@@ -140,7 +150,7 @@ export default function ChatPreview({
         </div>
       </div>
       {/* input */}
-      <div className="absolute left-0 right-0 bottom-0 z-[1] flex items-center gap-2 px-3 pb-3">
+      <div className="absolute left-0 right-0 bottom-0 z-[1] flex items-center gap-2 px-3 py-3 bg-white border-t border-neutral-200">
         <div
           className="w-10 h-10 rounded-full border border-wpTickBlue bg-white flex items-center justify-center text-wpTickBlue"
           aria-label="add attachment"
@@ -180,11 +190,6 @@ export default function ChatPreview({
           </svg>
         </div>
       </div>
-      {showWatermark && (
-        <div className="absolute bottom-14 right-3 z-[1] text-[11px] text-neutral-500 select-none">
-          made with PretendChat.com
-        </div>
-      )}
     </div>
   );
 
