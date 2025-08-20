@@ -31,7 +31,14 @@ export default function Page() {
 
   async function handleDownload() {
     const node = exportRef.current;
-    if (!node) return;
+    const previewNode = previewRef.current;
+    if (!node || !previewNode) return;
+
+    const src = previewNode.querySelector('[data-scrollable]') as HTMLElement | null;
+    const dst = node.querySelector('[data-scrollable]') as HTMLElement | null;
+    if (src && dst) {
+      dst.scrollTop = src.scrollTop;
+    }
 
     await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     const blob = await exportNodeToPNG(node, 2);
