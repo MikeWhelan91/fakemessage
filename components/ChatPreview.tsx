@@ -141,10 +141,44 @@ export default function ChatPreview({
       </div>
       {/* input */}
       <div className="absolute left-0 right-0 bottom-0 z-[1] flex items-center gap-2 px-3 pb-3">
+        <div
+          className="w-10 h-10 rounded-full border border-wpTickBlue flex items-center justify-center text-wpTickBlue"
+          aria-label="add attachment"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 5v14" />
+            <path d="M5 12l7-7 7 7" />
+          </svg>
+        </div>
         <div className="flex-1 h-11 rounded-2xl bg-white border border-neutral-200 shadow-[0_1px_0_rgba(0,0,0,.08)] flex items-center px-3 text-neutral-400">
           Message
         </div>
-        <div className="w-10 h-10 rounded-full grid place-items-center bg-[#00A8841A] text-[#00A884]">🎤</div>
+        <div
+          className="w-10 h-10 rounded-full border border-wpTickBlue flex items-center justify-center text-wpTickBlue"
+          aria-label="record voice message"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 1.5a3 3 0 00-3 3v6a3 3 0 006 0v-6a3 3 0 00-3-3z" />
+            <path d="M19.5 10.5a7.5 7.5 0 01-15 0" />
+            <path d="M12 19.5v3m0 0h3m-3 0H9" />
+          </svg>
+        </div>
       </div>
       {showWatermark && (
         <div className="absolute bottom-14 right-3 z-[1] text-[11px] text-neutral-500 select-none">
