@@ -17,6 +17,7 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
         <span className="uppercase">{carrier}</span>
         <span>{connection}</span>
         <div className="flex items-center gap-1">
+
           <div className="w-5 h-2.5 border border-black/70 rounded-[3px] relative flex items-center">
             <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
             <div className="h-full bg-black/80" style={{ width: `${Math.max(0, Math.min(100, battery))}%` }} />
