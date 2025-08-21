@@ -11,7 +11,7 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
 }) {
   return (
     <div className="relative h-7 bg-[#F2F3F5] text-[12px] text-black/80">
-      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2 leading-none">
+      <div className="absolute inset-y-0 right-2 flex items-center gap-2 leading-none">
         <span className="uppercase leading-none">{carrier}</span>
         <span className="leading-none">{connection}</span>
         <div className="flex items-center gap-1 leading-none">
@@ -22,7 +22,7 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
           {charging && <span title="charging">⚡</span>}
         </div>
       </div>
-      <div className="flex h-full items-center justify-center tracking-tight leading-none">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 leading-none font-semibold">
         {time}
       </div>
     </div>
