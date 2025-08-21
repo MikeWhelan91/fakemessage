@@ -1,41 +1,38 @@
 'use client';
+
 import { ChatState, ChatMessage } from '@/src/lib/types';
 import DeviceFrame from '@/components/DeviceFrame';
-import { DoubleTick, SingleTick } from './icons/Ticks';
 import cn from 'classnames';
+import { DoubleTick, SingleTick } from './icons/Ticks';
 
-type FrameMode = 'glass' | 'none'; // "glass" = pretty on-screen, "none" = export surface
+export type FrameMode = 'glass' | 'none';
 
-function StatusBar({ time, carrier, battery, charging }:{
-  time: string;
-  carrier: string;
-  battery: number;
-  charging: boolean;
+/* ===== Status bar ======================================================= */
+function StatusBar({
+  time, carrier, battery, charging,
+}:{
+  time: string; carrier: string; battery: number; charging: boolean;
 }) {
   return (
-    <div className="relative h-7 bg-[#F2F3F5] text-[12px] text-black/80 flex items-center">
-      {/* left items */}
-      <div className="flex items-center gap-2 pl-2 leading-none">
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center h-7 bg-[#F2F3F5] text-[12px] text-black/80 leading-none">
+      <div className="flex items-center gap-2 pl-2">
         <div className="flex items-center gap-[2px] h-3" aria-hidden>
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="w-1 h-1 rounded-full bg-black/80" />
           ))}
         </div>
-        <span>{carrier}</span>
+        <span className="tracking-tight">{carrier}</span>
       </div>
-
-      {/* centered time */}
-      <div className="absolute left-1/2 -translate-x-1/2 font-semibold leading-none">
-        {time}
-      </div>
-
-      {/* right items */}
-      <div className="flex items-center gap-1 pr-2 leading-none ml-auto">
-        <span>{battery} %</span>
+      <div className="justify-self-center font-semibold">{time}</div>
+      <div className="flex items-center gap-1 pr-2 justify-self-end">
+        <span className="tabular-nums">{battery}&nbsp;%</span>
         <div className="h-3 flex items-center">
-          <div className="relative w-5 h-2.5 border border-black/70 rounded-[3px] flex items-center">
+          <div className="relative w-5 h-2.5 border border-black/70 rounded-[3px]">
             <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
-            <div className="h-full bg-black/80" style={{ width: `${Math.max(0, Math.min(100, battery))}%` }} />
+            <div
+              className="h-full bg-black/80"
+              style={{ width: `${Math.max(0, Math.min(100, battery))}%` }}
+            />
           </div>
         </div>
         {charging && <span title="charging">⚡</span>}
@@ -43,21 +40,15 @@ function StatusBar({ time, carrier, battery, charging }:{
     </div>
   );
 }
+
+/* ===== Nav bar ========================================================== */
 function NavBarIOS({ name, subtitle, avatar }:{
   name:string; subtitle:string; avatar:string|null;
 }) {
   return (
     <div className="h-12 px-2 flex items-center justify-between bg-[#F2F3F5] border-b border-black/10">
       <div className="flex items-center gap-1 text-[16px] text-[#007AFF] font-medium">
-        <svg
-          viewBox="0 0 24 24"
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
+        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <polyline points="15 18 9 12 15 6" />
         </svg>
         <span>Chats</span>
@@ -78,6 +69,7 @@ function NavBarIOS({ name, subtitle, avatar }:{
   );
 }
 
+/* ===== Bubble =========================================================== */
 function Tail({ me, color }:{ me:boolean; color:string }) {
   return (
     <svg width="14" height="14" className={me ? 'absolute -right-1 bottom-2' : 'absolute -left-1 bottom-2'}>
@@ -99,10 +91,18 @@ function Bubble({ m }: { m: ChatMessage }) {
         <div className={cls} style={{ background: bg, color: '#111B21' }}>
           <Tail me={isMe} color={bg} />
           {m.kind === 'text' && <span>{m.text}</span>}
-          {m.kind === 'image' && m.imageDataUrl && <img src={m.imageDataUrl} className="rounded-xl max-w-full h-auto" alt="chat message image" />}
+          {m.kind === 'image' && m.imageDataUrl && (
+            <img src={m.imageDataUrl} className="rounded-xl max-w-full h-auto" alt="chat message image" />
+          )}
           <div className="mt-1 flex items-center gap-1 justify-end text-[12px] text-[#667781] select-none">
             <span>{m.timestamp}</span>
-            {isMe && (<>{m.status === 'sent' && <SingleTick className="w-3.5 h-3.5 text-[#8899a6]" />}{m.status === 'delivered' && <DoubleTick className="w-4 h-4" />}{m.status === 'read' && <DoubleTick className="w-4 h-4" blue />}</>)}
+            {isMe && (
+              <>
+                {m.status === 'sent' && <SingleTick className="w-3.5 h-3.5 text-[#8899a6]" />}
+                {m.status === 'delivered' && <DoubleTick className="w-4 h-4" />}
+                {m.status === 'read' && <DoubleTick className="w-4 h-4" blue />}
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -110,11 +110,12 @@ function Bubble({ m }: { m: ChatMessage }) {
   );
 }
 
+/* ===== ChatPreview ======================================================= */
 export default function ChatPreview({
   state,
   previewRef,
   frame = 'glass',
-  exportSize = { w: 390, h: 760 }
+  exportSize = { w: 300, h: 660 },
 }: {
   state: ChatState;
   previewRef:
@@ -136,9 +137,8 @@ export default function ChatPreview({
     onlineMode === 'typing…' ? 'typing…' :
     lastSeenText ? `last seen ${lastSeenText}` : 'last seen today';
 
-  // WhatsApp inner UI (no outer frame)
   const Inner = (
-    <div className="relative w-full h-full flex flex-col">
+    <div className="relative w-full h-full flex flex-col overflow-hidden">
       {/* wallpaper */}
       <div
         className={cn(
@@ -159,50 +159,24 @@ export default function ChatPreview({
         />
         <NavBarIOS name={contactName} subtitle={subtitle} avatar={avatarDataUrl} />
       </div>
-      {/* messages */}
-      <div
-        className="relative z-[1] flex-1 overflow-y-auto px-3 pt-3 pb-16"
-        data-scrollable
-      >
+      {/* messages — always scrollable (so export can “clip” like a phone) */}
+      <div className="relative z-[1] flex-1 px-3 pt-3 pb-16 overflow-y-auto" data-scrollable>
         <div className="flex flex-col gap-[6px]">
           {messages.map((m) => <Bubble key={m.id} m={m} />)}
         </div>
       </div>
       {/* input */}
-      <div className="absolute left-0 right-0 bottom-0 z-[1] flex items-center gap-2 px-3 py-3 bg-white border-t border-neutral-200">
-        <div
-          className="w-10 h-10 rounded-full border border-wpTickBlue bg-white flex items-center justify-center text-wpTickBlue"
-          aria-label="add attachment"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 5v14" />
-            <path d="M5 12l7-7 7 7" />
+      <div className="absolute left-0 right-0 bottom-0 z-[1] flex items-center gap-2 px-3 py-3 bg-white/95 border-t border-neutral-200">
+        <div className="w-10 h-10 rounded-full border border-wpTickBlue bg-white flex items-center justify-center text-wpTickBlue">
+          <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 5v14" /><path d="M5 12l7-7 7 7" />
           </svg>
         </div>
         <div className="flex-1 h-11 rounded-2xl bg-white border border-neutral-200 shadow-[0_1px_0_rgba(0,0,0,.08)] flex items-center px-3 text-neutral-400">
           Message
         </div>
-        <div
-          className="w-10 h-10 rounded-full border border-wpTickBlue bg-white flex items-center justify-center text-wpTickBlue"
-          aria-label="record voice message"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+        <div className="w-10 h-10 rounded-full border border-wpTickBlue bg-white flex items-center justify-center text-wpTickBlue">
+          <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 1.5a3 3 0 00-3 3v6a3 3 0 006 0v-6a3 3 0 00-3-3z" />
             <path d="M19.5 10.5a7.5 7.5 0 01-15 0" />
             <path d="M12 19.5v3m0 0h3m-3 0H9" />
@@ -213,24 +187,15 @@ export default function ChatPreview({
   );
 
   if (frame === 'glass') {
-    // On-screen preview (smaller, framed)
-    const width = exportSize.w;
-    const height = Math.round((width * 926) / 428);
-      return (
-        <div
-          style={{
-            width: `${width}px`,
-            height: `${height}px`,
-            ['--phone-w' as any]: `${width}px`,
-          }}
-          className="relative"
-        >
-          <DeviceFrame screenRef={previewRef}>{Inner}</DeviceFrame>
-        </div>
-      );
+    // On-screen framed preview, **screen** matches exportSize exactly
+    return (
+      <DeviceFrame screenSize={exportSize} screenRef={previewRef as React.Ref<HTMLDivElement>}>
+        {Inner}
+      </DeviceFrame>
+    );
   }
 
-  // Export surface (exact px size, no frame)
+  // Export surface: fixed size, no frame
   return (
     <div
       ref={previewRef as React.RefObject<HTMLDivElement>}

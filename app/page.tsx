@@ -1,9 +1,15 @@
 "use client";
-import { useRef, useState } from 'react';
-import ChatForm from '@/components/ChatForm';
-import ChatPreview from '@/components/ChatPreview';
-import { ChatState } from '@/src/lib/types';
-import { exportNodeToPNG } from '@/src/lib/exportToPng';
+
+import { useRef, useState } from "react";
+import ChatForm from "@/components/ChatForm";
+import ChatPreview from "@/components/ChatPreview";
+import { ChatState } from "@/src/lib/types";
+import { exportNodeToPNG } from "@/src/lib/exportToPng";
+
+// One TRUE screen size for both live preview and export
+const SCREEN_W = 300;
+const SCREEN_H = Math.round(SCREEN_W * 2.2);
+const PNG_SCALE = 2;
 
 const defaultState: ChatState = {
   header: {
@@ -22,49 +28,87 @@ const defaultState: ChatState = {
 };
 
 export default function Page() {
-  const [state, setState] = useState<ChatState>(defaultState);
-  const previewRef = useRef<HTMLDivElement>(null);
+  const [state, setStateRaw] = useState<ChatState>(defaultState);
 
-  const formSetState = (updater: (s: ChatState) => ChatState) =>
-    setState((s) => updater(s));
+  // ChatForm wants a callback-style setter
+  const setState = (updater: (s: ChatState) => ChatState) =>
+    setStateRaw((s) => updater(s));
+
+  const liveRef = useRef<HTMLDivElement>(null);
+  const exportRef = useRef<HTMLDivElement>(null);
 
   async function handleDownload() {
-    const node = previewRef.current;
+    const node = exportRef.current;
     if (!node) return;
 
-    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
-    const blob = await exportNodeToPNG(node, 2);
+    const prevDisp = node.style.display;
+    const prevOp = node.style.opacity;
+    node.style.display = "block";
+    node.style.opacity = "1";
 
+    try { await (document as any).fonts?.ready; } catch {}
+    await new Promise((r) => requestAnimationFrame(r));
+
+    // Make the export look like a phone screenshot (scrolled to bottom)
+    const scroller = node.querySelector("[data-scrollable]") as HTMLElement | null;
+    if (scroller) {
+      scroller.scrollTop = scroller.scrollHeight;
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+
+    const blob = await exportNodeToPNG(node, PNG_SCALE);
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = 'pretendchat-whatsapp-chat.png';
-    document.body.appendChild(a);
+    a.download = "pretendchat-whatsapp-chat.png";
     a.click();
-    a.remove();
     URL.revokeObjectURL(url);
+
+    node.style.display = prevDisp || "none";
+    node.style.opacity = prevOp || "0";
   }
 
   return (
-    <main className="max-w-5xl mx-auto p-4">
-      <h1 className="mb-6 text-3xl font-bold text-center text-[#00A884]">
-        PretendChat
-      </h1>
-      <div className="grid md:grid-cols-[1fr_auto] gap-6">
-        <ChatForm state={state} setState={formSetState} />
-        <div className="flex flex-col items-center">
-          <ChatPreview
-            state={state}
-            previewRef={previewRef}
-            exportSize={{ w: 320, h: 693 }}
-          />
-          <button
-            className="mt-4 rounded-md bg-[#00A884] px-4 py-2 text-sm font-medium text-white hover:bg-[#029e70]"
-            onClick={handleDownload}
-          >
-            Download Image
-          </button>
-        </div>
+    <main className="mx-auto max-w-7xl p-4 grid gap-8 md:grid-cols-[minmax(0,1fr)_320px]">
+      {/* left: form */}
+      <ChatForm state={state} setState={setState} />
+
+      {/* right: framed preview + download */}
+      <aside className="sticky top-4 self-start">
+        <ChatPreview
+          state={state}
+          previewRef={liveRef}
+          frame="glass"
+          exportSize={{ w: SCREEN_W, h: SCREEN_H }}
+        />
+        <button
+          onClick={handleDownload}
+          className="mt-4 w-full rounded-lg bg-neutral-900 px-4 py-2 text-white hover:bg-neutral-800"
+        >
+          Download Image
+        </button>
+      </aside>
+
+      {/* hidden export surface: EXACT same screen size, no frame */}
+      <div
+        ref={exportRef}
+        style={{
+          width: SCREEN_W,
+          height: SCREEN_H,
+          position: "fixed",
+          left: "-10000px",
+          top: "0",
+          opacity: 0,
+          pointerEvents: "none",
+          display: "none",
+        }}
+      >
+        <ChatPreview
+          state={state}
+          previewRef={{ current: null }}
+          frame="none"
+          exportSize={{ w: SCREEN_W, h: SCREEN_H }}
+        />
       </div>
     </main>
   );
