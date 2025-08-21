@@ -6,24 +6,29 @@ import cn from 'classnames';
 
 type FrameMode = 'glass' | 'none'; // "glass" = pretty on-screen, "none" = export surface
 
-function StatusBar({ time, carrier, connection, battery, charging }:{
-  time:string; carrier:string; connection:string; battery:number; charging:boolean;
+function StatusBar({ time, carrier, battery, charging }:{
+  time:string; carrier:string; battery:number; charging:boolean;
 }) {
   return (
-    <div className="relative h-7 bg-[#F2F3F5] text-[12px] text-black/80">
-      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2 leading-none">
-        <span className="uppercase leading-none">{carrier}</span>
-        <span className="leading-none">{connection}</span>
-        <div className="flex items-center gap-1 leading-none">
-          <div className="w-5 h-2.5 border border-black/70 rounded-[3px] relative flex items-center">
-            <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
-            <div className="h-full bg-black/80" style={{width:`${Math.max(0,Math.min(100,battery))}%`}} />
-          </div>
-          {charging && <span title="charging">⚡</span>}
+    <div className="relative flex items-center h-7 bg-[#F2F3F5] text-[12px] text-black/80">
+      <div className="flex items-center gap-2 pl-2 leading-none">
+        <div className="flex gap-[2px]" aria-hidden>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="w-1 h-1 rounded-full bg-black/80" />
+          ))}
         </div>
+        <span>{carrier}</span>
       </div>
-      <div className="flex h-full items-center justify-center tracking-tight leading-none">
+      <div className="absolute left-1/2 -translate-x-1/2 font-semibold leading-none">
         {time}
+      </div>
+      <div className="flex items-center gap-1 ml-auto pr-2 leading-none">
+        <span>{battery} %</span>
+        <div className="relative w-5 h-2.5 border border-black/70 rounded-[3px] flex items-center">
+          <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
+          <div className="h-full bg-black/80" style={{ width: `${Math.max(0, Math.min(100, battery))}%` }} />
+        </div>
+        {charging && <span title="charging">⚡</span>}
       </div>
     </div>
   );
@@ -111,7 +116,7 @@ export default function ChatPreview({
   const {
     header: {
       contactName, onlineMode, lastSeenText, phoneTime, carrier,
-      connection, batteryPercent, charging, avatarDataUrl, wallpaper
+      batteryPercent, charging, avatarDataUrl, wallpaper
     },
     messages
   } = state;
@@ -139,7 +144,6 @@ export default function ChatPreview({
         <StatusBar
           time={phoneTime}
           carrier={carrier}
-          connection={connection}
           battery={batteryPercent}
           charging={charging}
         />
