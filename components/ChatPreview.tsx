@@ -7,10 +7,14 @@ import cn from 'classnames';
 type FrameMode = 'glass' | 'none'; // "glass" = pretty on-screen, "none" = export surface
 
 function StatusBar({ time, carrier, battery, charging }:{
-  time:string; carrier:string; battery:number; charging:boolean;
+  time: string;
+  carrier: string;
+  battery: number;
+  charging: boolean;
 }) {
   return (
-    <div className="relative flex items-center h-7 bg-[#F2F3F5] text-[12px] text-black/80">
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center h-7 bg-[#F2F3F5] text-[12px] text-black/80">
+
       <div className="flex items-center gap-2 pl-2 leading-none">
         <div className="flex gap-[2px]" aria-hidden>
           {Array.from({ length: 5 }).map((_, i) => (
@@ -19,10 +23,11 @@ function StatusBar({ time, carrier, battery, charging }:{
         </div>
         <span>{carrier}</span>
       </div>
-      <div className="absolute left-1/2 -translate-x-1/2 font-semibold leading-none">
+      <div className="justify-self-center font-semibold leading-none">
         {time}
       </div>
-      <div className="flex items-center gap-1 ml-auto pr-2 leading-none">
+      <div className="flex items-center gap-1 justify-self-end pr-2 leading-none">
+
         <span>{battery} %</span>
         <div className="relative w-5 h-2.5 border border-black/70 rounded-[3px] flex items-center">
           <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
@@ -207,19 +212,18 @@ export default function ChatPreview({
     // On-screen preview (smaller, framed)
     const width = exportSize.w;
     const height = Math.round((width * 926) / 428);
-    return (
-      <div
-        ref={previewRef as React.RefObject<HTMLDivElement>}
-        style={{
-          width: `${width}px`,
-          height: `${height}px`,
-          ['--phone-w' as any]: `${width}px`,
-        }}
-        className="relative"
-      >
-        <DeviceFrame>{Inner}</DeviceFrame>
-      </div>
-    );
+      return (
+        <div
+          style={{
+            width: `${width}px`,
+            height: `${height}px`,
+            ['--phone-w' as any]: `${width}px`,
+          }}
+          className="relative"
+        >
+          <DeviceFrame screenRef={previewRef}>{Inner}</DeviceFrame>
+        </div>
+      );
   }
 
   // Export surface (exact px size, no frame)
