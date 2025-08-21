@@ -29,6 +29,24 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
       });
     },
   });
+  const { width, height } = node.getBoundingClientRect();
+  const output = document.createElement("canvas");
+  output.width = width * scale;
+  output.height = height * scale;
+  const ctx = output.getContext("2d");
+  if (ctx) {
+    ctx.drawImage(
+      canvas,
+      0,
+      0,
+      output.width,
+      output.height,
+      0,
+      0,
+      output.width,
+      output.height
+    );
+  }
 
   const blob = await new Promise<Blob | null>((resolve) =>
     output.toBlob((b) => resolve(b), "image/png")
