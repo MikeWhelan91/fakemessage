@@ -24,13 +24,34 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
     },
   });
 
+  // html2canvas renders all scrollable content. Crop the result to the
+  // element's on-screen size so only visible messages are exported.
+  const { width, height } = node.getBoundingClientRect();
+  const output = document.createElement("canvas");
+  output.width = width * scale;
+  output.height = height * scale;
+  const ctx = output.getContext("2d");
+  if (ctx) {
+    ctx.drawImage(
+      canvas,
+      0,
+      0,
+      output.width,
+      output.height,
+      0,
+      0,
+      output.width,
+      output.height
+    );
+  }
+
   const blob = await new Promise<Blob | null>((resolve) =>
-    canvas.toBlob((b) => resolve(b), "image/png")
+    output.toBlob((b) => resolve(b), "image/png")
   );
 
   if (blob) return blob;
 
-  const dataUrl = canvas.toDataURL("image/png");
+  const dataUrl = output.toDataURL("image/png");
   const res = await fetch(dataUrl);
   return res.blob();
 }
