@@ -13,9 +13,10 @@ function StatusBar({ time, carrier, battery, charging }:{
   charging: boolean;
 }) {
   return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center h-7 bg-[#F2F3F5] text-[12px] text-black/80">
+    <div className="relative h-7 bg-[#F2F3F5] text-[12px] text-black/80">
+      {/* left items */}
+      <div className="absolute inset-y-0 left-0 flex items-center gap-2 pl-2 leading-none">
 
-      <div className="flex items-center gap-2 pl-2 leading-none">
         <div className="flex gap-[2px]" aria-hidden>
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="w-1 h-1 rounded-full bg-black/80" />
@@ -23,10 +24,14 @@ function StatusBar({ time, carrier, battery, charging }:{
         </div>
         <span>{carrier}</span>
       </div>
-      <div className="justify-self-center font-semibold leading-none">
+
+      {/* centered time */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-semibold leading-none">
         {time}
       </div>
-      <div className="flex items-center gap-1 justify-self-end pr-2 leading-none">
+
+      {/* right items */}
+      <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-2 leading-none justify-end">
 
         <span>{battery} %</span>
         <div className="relative w-5 h-2.5 border border-black/70 rounded-[3px] flex items-center">
@@ -35,7 +40,6 @@ function StatusBar({ time, carrier, battery, charging }:{
         </div>
         {charging && <span title="charging">⚡</span>}
       </div>
-
     </div>
   );
 }
