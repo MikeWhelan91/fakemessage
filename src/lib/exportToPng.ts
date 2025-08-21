@@ -19,31 +19,16 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
     onclone: (doc) => {
       const cloned = doc.querySelectorAll<HTMLElement>("[data-scrollable]");
       cloned.forEach((el, i) => {
-        el.scrollTop = positions[i] ?? 0;
+        const top = positions[i] ?? 0;
+        el.scrollTop = 0;
+        el.style.overflow = "hidden";
+        const inner = el.firstElementChild as HTMLElement | null;
+        if (inner) {
+          inner.style.transform = `translateY(-${top}px)`;
+        }
       });
     },
   });
-
-  // html2canvas renders all scrollable content. Crop the result to the
-  // element's on-screen size so only visible messages are exported.
-  const { width, height } = node.getBoundingClientRect();
-  const output = document.createElement("canvas");
-  output.width = width * scale;
-  output.height = height * scale;
-  const ctx = output.getContext("2d");
-  if (ctx) {
-    ctx.drawImage(
-      canvas,
-      0,
-      0,
-      output.width,
-      output.height,
-      0,
-      0,
-      output.width,
-      output.height
-    );
-  }
 
   const blob = await new Promise<Blob | null>((resolve) =>
     output.toBlob((b) => resolve(b), "image/png")

@@ -22,7 +22,7 @@ function StatusBar({ time, carrier, connection, battery, charging }:{
           {charging && <span title="charging">⚡</span>}
         </div>
       </div>
-      <div className="flex h-full items-center justify-center tracking-tight leading-none">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 leading-none font-semibold">
         {time}
       </div>
     </div>
