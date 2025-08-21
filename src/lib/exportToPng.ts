@@ -18,6 +18,24 @@ export async function exportNodeToPNG(
     useCORS: true,
     allowTaint: true,
   });
+  const { width, height } = node.getBoundingClientRect();
+  const output = document.createElement("canvas");
+  output.width = width * scale;
+  output.height = height * scale;
+  const ctx = output.getContext("2d");
+  if (ctx) {
+    ctx.drawImage(
+      canvas,
+      0,
+      0,
+      output.width,
+      output.height,
+      0,
+      0,
+      output.width,
+      output.height
+    );
+  }
 
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -26,4 +44,5 @@ export async function exportNodeToPNG(
     }, "image/png");
   });
 }
+
 
