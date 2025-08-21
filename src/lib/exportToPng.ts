@@ -6,7 +6,11 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
   const scrollables = Array.from(
     node.querySelectorAll<HTMLElement>("[data-scrollable]")
   );
-  const positions = scrollables.map((el) => el.scrollTop);
+  const metrics = scrollables.map((el) => ({
+    top: el.scrollTop,
+    height: el.clientHeight,
+  }));
+
 
   const canvas = await html2canvas(node, {
     backgroundColor: null,
@@ -19,9 +23,11 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
     onclone: (doc) => {
       const cloned = doc.querySelectorAll<HTMLElement>("[data-scrollable]");
       cloned.forEach((el, i) => {
-        const top = positions[i] ?? 0;
+        const { top, height } = metrics[i] ?? { top: 0, height: 0 };
         el.scrollTop = 0;
         el.style.overflow = "hidden";
+        el.style.height = `${height}px`;
+
         const inner = el.firstElementChild as HTMLElement | null;
         if (inner) {
           inner.style.transform = `translateY(-${top}px)`;
