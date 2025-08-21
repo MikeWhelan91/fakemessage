@@ -18,9 +18,6 @@ export async function exportNodeToPNG(
     scale,
     useCORS: true,
     allowTaint: true,
-    scrollX: -window.scrollX,
-    scrollY: -window.scrollY,
-    foreignObjectRendering: true,
 
     onclone: (doc) => {
       const originalScrollable = node.querySelector(
