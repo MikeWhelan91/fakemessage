@@ -4,7 +4,13 @@ import React from "react";
  * Classic phone frame with visible bezel, speaker and home button.
  * Scales with --phone-w.
  */
-export default function DeviceFrame({ children }: { children: React.ReactNode }) {
+export default function DeviceFrame({
+  children,
+  screenRef,
+}: {
+  children: React.ReactNode;
+  screenRef?: React.Ref<HTMLDivElement>;
+}) {
   return (
     <div
       className="relative"
@@ -21,7 +27,10 @@ export default function DeviceFrame({ children }: { children: React.ReactNode })
       {/* home button */}
       <div className="absolute bottom-[28px] left-1/2 -translate-x-1/2 w-[72px] h-[72px] rounded-full border-4 border-neutral-700 z-20" />
       {/* screen */}
-      <div className="absolute top-[80px] bottom-[100px] left-[24px] right-[24px] rounded-[24px] bg-white overflow-hidden z-10">
+      <div
+        ref={screenRef}
+        className="absolute top-[80px] bottom-[100px] left-[24px] right-[24px] rounded-[24px] bg-white overflow-hidden z-10"
+      >
         {children}
       </div>
     </div>

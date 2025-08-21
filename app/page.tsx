@@ -24,21 +24,13 @@ const defaultState: ChatState = {
 export default function Page() {
   const [state, setState] = useState<ChatState>(defaultState);
   const previewRef = useRef<HTMLDivElement>(null);
-  const exportRef = useRef<HTMLDivElement>(null);
 
   const formSetState = (updater: (s: ChatState) => ChatState) =>
     setState((s) => updater(s));
 
   async function handleDownload() {
-    const node = exportRef.current;
-    const previewNode = previewRef.current;
-    if (!node || !previewNode) return;
-
-    const src = previewNode.querySelector('[data-scrollable]') as HTMLElement | null;
-    const dst = node.querySelector('[data-scrollable]') as HTMLElement | null;
-    if (src && dst) {
-      dst.scrollTop = src.scrollTop;
-    }
+    const node = previewRef.current;
+    if (!node) return;
 
     await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     const blob = await exportNodeToPNG(node, 2);
@@ -61,21 +53,11 @@ export default function Page() {
       <div className="grid md:grid-cols-[1fr_auto] gap-6">
         <ChatForm state={state} setState={formSetState} />
         <div className="flex flex-col items-center">
-          {/* Smaller on-screen preview */}
           <ChatPreview
             state={state}
             previewRef={previewRef}
             exportSize={{ w: 320, h: 693 }}
           />
-          {/* Off-screen export surface without frame */}
-          <div className="fixed -top-[10000px]" aria-hidden>
-            <ChatPreview
-              state={state}
-              previewRef={exportRef}
-              frame="none"
-              exportSize={{ w: 320, h: 693 }}
-            />
-          </div>
           <button
             className="mt-4 rounded-md bg-[#00A884] px-4 py-2 text-sm font-medium text-white hover:bg-[#029e70]"
             onClick={handleDownload}
