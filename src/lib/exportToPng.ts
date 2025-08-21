@@ -2,40 +2,37 @@ import html2canvas from "html2canvas";
 
 export async function exportNodeToPNG(
   node: HTMLElement,
-  scale = 2
+  scale = window.devicePixelRatio || 1
 ): Promise<Blob> {
-  const rect = node.getBoundingClientRect();
+  // Ensure custom fonts are ready before rendering to avoid layout shifts
+  if ((document as any).fonts?.ready) {
+    await (document as any).fonts.ready;
+  }
 
-  const canvas = await html2canvas(document.body, {
+  // Capture only the provided node so the exported image matches the
+  // on‑screen preview exactly. Using onclone allows us to preserve the
+  // current scroll position of the chat messages container so off‑screen
+  // bubbles remain hidden in the final image.
+  const canvas = await html2canvas(node, {
     backgroundColor: null,
     scale,
-    x: rect.left,
-    y: rect.top,
-    width: rect.width,
-    height: rect.height,
-    scrollX: -window.scrollX,
-    scrollY: -window.scrollY,
     useCORS: true,
     allowTaint: true,
+    scrollX: -window.scrollX,
+    scrollY: -window.scrollY,
+    foreignObjectRendering: true,
+    onclone: (doc) => {
+      const originalScrollable = node.querySelector(
+        "[data-scrollable]"
+      ) as HTMLElement | null;
+      const clonedScrollable = doc.querySelector(
+        "[data-scrollable]"
+      ) as HTMLElement | null;
+      if (originalScrollable && clonedScrollable) {
+        clonedScrollable.scrollTop = originalScrollable.scrollTop;
+      }
+    },
   });
-  const { width, height } = node.getBoundingClientRect();
-  const output = document.createElement("canvas");
-  output.width = width * scale;
-  output.height = height * scale;
-  const ctx = output.getContext("2d");
-  if (ctx) {
-    ctx.drawImage(
-      canvas,
-      0,
-      0,
-      output.width,
-      output.height,
-      0,
-      0,
-      output.width,
-      output.height
-    );
-  }
 
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
