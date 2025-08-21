@@ -11,6 +11,7 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
     height: el.clientHeight,
   }));
 
+
   const canvas = await html2canvas(node, {
     backgroundColor: null,
     scale,
@@ -26,6 +27,7 @@ export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blo
         el.scrollTop = 0;
         el.style.overflow = "hidden";
         el.style.height = `${height}px`;
+
         const inner = el.firstElementChild as HTMLElement | null;
         if (inner) {
           inner.style.transform = `translateY(-${top}px)`;

@@ -30,6 +30,7 @@ function StatusBar({ time, carrier, battery, charging }:{
         </div>
         {charging && <span title="charging">⚡</span>}
       </div>
+
     </div>
   );
 }
