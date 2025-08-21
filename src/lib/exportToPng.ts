@@ -1,23 +1,29 @@
 import html2canvas from "html2canvas";
 
-export async function exportNodeToPNG(node: HTMLElement, scale = 2): Promise<Blob> {
-  const canvas = await html2canvas(node, {
+export async function exportNodeToPNG(
+  node: HTMLElement,
+  scale = 2
+): Promise<Blob> {
+  const rect = node.getBoundingClientRect();
+
+  const canvas = await html2canvas(document.body, {
     backgroundColor: null,
     scale,
+    x: rect.left,
+    y: rect.top,
+    width: rect.width,
+    height: rect.height,
+    scrollX: -window.scrollX,
+    scrollY: -window.scrollY,
     useCORS: true,
     allowTaint: true,
-    // Ensure the captured output isn't offset when the page is scrolled
-    scrollX: 0,
-    scrollY: -window.scrollY,
   });
 
-  const blob = await new Promise<Blob | null>((resolve) =>
-    canvas.toBlob((b) => resolve(b), "image/png")
-  );
-
-  if (blob) return blob;
-
-  const dataUrl = canvas.toDataURL("image/png");
-  const res = await fetch(dataUrl);
-  return res.blob();
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("Failed to export canvas"));
+    }, "image/png");
+  });
 }
+
