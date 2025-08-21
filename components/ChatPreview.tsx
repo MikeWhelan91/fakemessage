@@ -14,6 +14,7 @@ function StatusBar({ time, carrier, battery, charging }:{
 }) {
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] items-center h-7 bg-[#F2F3F5] text-[12px] text-black/80">
+
       <div className="flex items-center gap-2 pl-2 leading-none">
         <div className="flex gap-[2px]" aria-hidden>
           {Array.from({ length: 5 }).map((_, i) => (
@@ -26,6 +27,7 @@ function StatusBar({ time, carrier, battery, charging }:{
         {time}
       </div>
       <div className="flex items-center gap-1 justify-self-end pr-2 leading-none">
+
         <span>{battery} %</span>
         <div className="relative w-5 h-2.5 border border-black/70 rounded-[3px] flex items-center">
           <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-1.5 bg-black/70 rounded-sm" />
@@ -33,6 +35,7 @@ function StatusBar({ time, carrier, battery, charging }:{
         </div>
         {charging && <span title="charging">⚡</span>}
       </div>
+
     </div>
   );
 }
