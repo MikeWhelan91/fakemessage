@@ -21,6 +21,7 @@ export async function exportNodeToPNG(
     scrollX: -window.scrollX,
     scrollY: -window.scrollY,
     foreignObjectRendering: true,
+
     onclone: (doc) => {
       const originalScrollable = node.querySelector(
         "[data-scrollable]"
